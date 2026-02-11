@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { User, UserRole, StationConfig, FuelStock, Pump, LubricantStock, AccountCustomer, Invoice, InvoiceType, Supplier, Expense, Payment, BankAccount } from './types';
 import { DEFAULT_USERS, MOCK_FUEL_STOCKS, MOCK_LUBRICANTS } from './constants';
@@ -102,7 +103,6 @@ const App: React.FC = () => {
 
   const handleShiftComplete = (data: any) => {
     setPumps(data.pumps);
-    // Gestion des lubrifiants vendus
     if (data.lubricantSales) {
       setLubricants(prev => prev.map(lub => {
         const sold = data.lubricantSales.find((s: any) => s.id === lub.id);
@@ -141,7 +141,6 @@ const App: React.FC = () => {
           paymentMethod: 'ESPECES',
           recordedBy: currentUser?.name || 'Système'
         };
-        // Fixed: Use 'prev' instead of the incorrect 'expensies' variable name.
         setExpenses(prev => [newExp, ...prev]);
       }
     });
@@ -235,8 +234,6 @@ const App: React.FC = () => {
         return <BankManager banks={banks} payments={payments} customers={customers} suppliers={suppliers} onAddPayment={handleAddPayment} currency={stationConfig.currency} />;
       case 'expenses':
         return <ExpensesManager expenses={expenses} onAddExpense={(exp) => setExpenses([exp, ...expenses])} currency={stationConfig.currency} />;
-      case 'lubricants':
-        return <LubricantsManager lubricants={lubricants} setLubricants={setLubricants} currency={stationConfig.currency} />;
       case 'reports':
         return <FinancialReports invoices={invoices} expenses={expenses} payments={payments} currency={stationConfig.currency} />;
       case 'settings':
